@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+data/
+.env
+.env.*
+!.env.example
+gateway.config.json
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-journal
+.DS_Store
+Thumbs.db

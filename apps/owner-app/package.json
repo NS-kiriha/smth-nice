@@ -1,0 +1,6 @@
+{
+  "name": "@smth-nice/owner-app",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Owner PWA served by the relay. Implemented in phase 4."
+}
