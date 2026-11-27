@@ -45,3 +45,7 @@ SQLite migrations in `migrations/` run automatically when the gateway starts.
 ```bash
 corepack pnpm --filter @smth-nice/gateway test
 ```
+
+## Environment Variables
+
+- `COOKIE_SECURE`: Set to `true` in the environment only when the gateway is served over HTTPS. It defaults to `false` for local HTTP development and LAN setup. The secure flag is applied consistently to login and logout cookies.

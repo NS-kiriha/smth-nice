@@ -2,10 +2,10 @@ import type { FastifyInstance } from "fastify";
 import { loginRequestSchema, tenantMeSchema } from "@smth-nice/shared";
 import type { DatabaseConnection } from "./db.js";
 import {
+  buildTenantCookie,
   getTenantFromRequest,
   loginTenant,
   revokeTenantSession,
-  TENANT_COOKIE,
 } from "./auth.js";
 
 export function registerAuthRoutes(app: FastifyInstance, db: DatabaseConnection): void {
@@ -49,7 +49,7 @@ export function registerAuthRoutes(app: FastifyInstance, db: DatabaseConnection)
     await revokeTenantSession(db, request);
     reply.header(
       "set-cookie",
-      `${TENANT_COOKIE}=; HttpOnly; Secure; SameSite=Strict; Path=/api/v1; Max-Age=0`,
+      buildTenantCookie("", 0),
     );
     return { ok: true };
   });

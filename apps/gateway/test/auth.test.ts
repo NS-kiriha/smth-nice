@@ -5,6 +5,7 @@ import * as argon2 from "argon2";
 import { randomUUID } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 import { buildApp } from "../src/app.js";
+import { buildTenantCookie } from "../src/auth.js";
 import { openDatabase } from "../src/db.js";
 
 const cleanupPaths: string[] = [];
@@ -77,5 +78,19 @@ describe("tenant authentication", () => {
 
     expect(response.statusCode).toBe(401);
     await app.close();
+  });
+
+  it("does not add Secure to tenant cookies when COOKIE_SECURE=false", () => {
+    const previous = process.env.COOKIE_SECURE;
+    process.env.COOKIE_SECURE = "false";
+
+    try {
+      const cookie = buildTenantCookie("token-value", 3600);
+      expect(cookie).toContain("tenant_session=token-value");
+      expect(cookie).not.toContain("Secure");
+    } finally {
+      if (previous === undefined) delete process.env.COOKIE_SECURE;
+      else process.env.COOKIE_SECURE = previous;
+    }
   });
 });

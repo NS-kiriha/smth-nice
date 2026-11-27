@@ -45,10 +45,17 @@ export function readCookie(request: FastifyRequest, name: string): string | unde
   return undefined;
 }
 
+export function buildTenantCookie(value: string, maxAge: number): string {
+  const secure = process.env.COOKIE_SECURE?.trim().toLowerCase() === "true";
+  const secureFlag = secure ? "; Secure" : "";
+
+  return `${TENANT_COOKIE}=${encodeURIComponent(value)}; HttpOnly${secureFlag}; SameSite=Strict; Path=/api/v1; Max-Age=${maxAge}`;
+}
+
 function setSessionCookie(reply: FastifyReply, token: string): void {
   reply.header(
     "set-cookie",
-    `${TENANT_COOKIE}=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=Strict; Path=/api/v1; Max-Age=${Math.floor(SESSION_MS / 1000)}`,
+    buildTenantCookie(token, Math.floor(SESSION_MS / 1000)),
   );
 }
 
